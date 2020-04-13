@@ -1,0 +1,29 @@
+{
+  "name": "webpack-full-course",
+  "version": "1.0.0",
+  "description": "Assembly of Webpack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BertFrontEnd/webpack-full-course.git"
+  },
+  "keywords": [
+    "webpack",
+    "npm",
+    "javascript",
+    "rss"
+  ],
+  "author": "BertFrontEnd <Berton@yandex.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BertFrontEnd/webpack-full-course/issues"
+  },
+  "homepage": "https://github.com/BertFrontEnd/webpack-full-course#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}

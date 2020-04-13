@@ -4,7 +4,7 @@ function createAnalytics() {
 
   const listener = () => counter++;
 
-  document.addEventListener('click', listener)
+  document.addEventListener('click', listener);
   return {
     destroy() {
       document.removeEventListener('click', listener);
@@ -13,11 +13,11 @@ function createAnalytics() {
 
     getClicks() {
       if (isDestroyed) {
-        return "Analytics is destroyed";
+        return 'Analytics is destroyed. Total clicks = ${counter}';
       }
       return counter;
-    }
-  }
+    },
+  };
 }
 
 let analytics = createAnalytics();
