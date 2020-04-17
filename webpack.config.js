@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -60,6 +61,50 @@ const babelOptions = (preset) => {
   return opts;
 };
 
+const isLoaders = () => {
+  const loader = [
+    {
+      loader: 'babel-loader',
+      options: babelOptions(),
+    },
+  ];
+
+  if (isDev) {
+    loader.push('eslint-loader');
+  }
+
+  return loader;
+};
+
+const plugins = () => {
+  const base = [
+    new HTMLWebpackPlugin({
+      /* title: 'Webpack BertFrontEnd', */
+      template: './src/index.html',
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    }),
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, './src/favicon.ico'),
+        to: path.resolve(__dirname, 'dist'),
+      },
+    ]),
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
+      path: path.resolve(__dirname, 'dist'),
+    }),
+  ];
+
+  if (isProd) {
+    base.push(new BundleAnalyzerPlugin());
+  }
+
+  return base;
+};
+
 module.exports = {
   /* context: path.resolve(__dirname, 'src'), */
   mode: 'development',
@@ -92,27 +137,7 @@ module.exports = {
 
   devtool: isDev ? 'source-map' : '',
 
-  plugins: [
-    new HTMLWebpackPlugin({
-      /* title: 'Webpack BertFrontEnd', */
-      template: './src/index.html',
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, './src/favicon.ico'),
-        to: path.resolve(__dirname, 'dist'),
-      },
-    ]),
-    new MiniCssExtractPlugin({
-      filename: filename('css'),
-      path: path.resolve(__dirname, 'dist'),
-    }),
-  ],
-
+  plugins: plugins(),
   module: {
     rules: [
       {
@@ -146,10 +171,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: {
-          loader: 'babel-loader',
-          options: babelOptions(),
-        },
+        use: isLoaders(),
       },
       {
         test: /\.ts$/,
